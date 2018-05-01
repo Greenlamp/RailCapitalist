@@ -6,7 +6,11 @@ import {notes} from "../actions";
 class PonyNote extends Component {
 
   componentDidMount() {
-    this.props.fetchNotes();
+    try {
+      this.props.fetchNotes();
+    } catch (e) {
+      console.log(e);
+    }
   }
 
   state = {
@@ -26,15 +30,14 @@ class PonyNote extends Component {
   submitNote = (e) => {
     e.preventDefault();
     if (this.state.updateNoteId === null) {
-      this.props.addNote(this.state.text);
+      this.props.addNote(this.state.text).then(this.resetForm)
     } else {
-      this.props.updateNote(this.state.updateNoteId, this.state.text);
+      this.props.updateNote(this.state.updateNoteId, this.state.text).then(this.resetForm);
     }
     this.resetForm();
   }
 
   render() {
-    console.log(this.state);
     return (
       <div>
         <h2>Welcome to PonyNote!</h2>
@@ -77,10 +80,10 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
   return {
     addNote: (text) => {
-      dispatch(notes.addNote(text));
+      return dispatch(notes.addNote(text));
     },
     updateNote: (id, text) => {
-      dispatch(notes.updateNote(id, text));
+      return dispatch(notes.updateNote(id, text));
     },
     deleteNote: (id) => {
       dispatch(notes.deleteNote(id));

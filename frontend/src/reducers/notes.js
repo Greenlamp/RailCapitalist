@@ -7,16 +7,16 @@ export default function notes(state=initialState, action) {
   switch (action.type) {
 
     case 'ADD_NOTE':
-      return [...state, {text: action.text}];
+      return [...state, action.note];
 
     case 'UPDATE_NOTE':
-      let noteToUpdate = noteList[action.id]
-      noteToUpdate.text = action.text;
-      noteList.splice(action.id, 1, noteToUpdate);
+      let noteToUpdate = noteList[action.index]
+      noteToUpdate.text = action.note.text;
+      noteList.splice(action.index, 1, noteToUpdate);
       return noteList;
 
     case 'DELETE_NOTE':
-      noteList.splice(action.id, 1);
+      noteList.splice(action.index, 1);
       return noteList;
 
     case 'FETCH_NOTES':
