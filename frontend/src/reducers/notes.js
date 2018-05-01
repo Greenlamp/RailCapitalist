@@ -1,6 +1,4 @@
-const initialState = [
-  {text: "Write code!"}
-];
+const initialState = [];
 
 
 export default function notes(state=initialState, action) {
@@ -20,6 +18,9 @@ export default function notes(state=initialState, action) {
     case 'DELETE_NOTE':
       noteList.splice(action.id, 1);
       return noteList;
+
+    case 'FETCH_NOTES':
+      return [...state, ...action.notes];
 
     default:
       return state;

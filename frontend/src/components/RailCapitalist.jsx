@@ -4,6 +4,11 @@ import {notes} from "../actions";
 
 
 class PonyNote extends Component {
+
+  componentDidMount() {
+    this.props.fetchNotes();
+  }
+
   state = {
     text: "",
     updateNoteId: null,
@@ -29,7 +34,7 @@ class PonyNote extends Component {
   }
 
   render() {
-    console.log(this.noteList);
+    console.log(this.state);
     return (
       <div>
         <h2>Welcome to PonyNote!</h2>
@@ -79,6 +84,9 @@ const mapDispatchToProps = dispatch => {
     },
     deleteNote: (id) => {
       dispatch(notes.deleteNote(id));
+    },
+    fetchNotes: () => {
+      dispatch(notes.fetchNotes());
     },
   }
 }
