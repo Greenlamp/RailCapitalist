@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import Zone from "./Zone";
+import ProgressBar from "../components/ProgressBar";
 import {connect} from 'react-redux';
 
 class Board extends Component{
@@ -66,7 +66,7 @@ class Board extends Component{
                 Reset Progress
               </button>
               <hr />
-              <Zone progress={this.state.progress}/>
+              <ProgressBar progress={this.state.progress}/>
             </div>
           </div>
         )
