@@ -1,3 +1,3 @@
-import * as notes from "./notes";
+import * as board from "./board";
 
-export {notes}
+export {board}

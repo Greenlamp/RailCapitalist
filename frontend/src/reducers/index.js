@@ -1,9 +1,9 @@
 import { combineReducers } from 'redux';
-import notes from "./notes";
+import board from "./board"
 
 
-const ponyApp = combineReducers({
-  notes,
+const railApp = combineReducers({
+  board
 })
 
-export default ponyApp;
+export default railApp;
