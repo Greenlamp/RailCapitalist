@@ -5,6 +5,55 @@ import {notes} from "../actions";
 
 class PonyNote extends Component {
 
+  constructor(props) {
+    super(props)
+    this.handleClickChange = this.handleClickChange.bind(this)
+    this.handleClickReset = this.handleClickReset.bind(this)
+    this.state = { progress: 0, time: {}, seconds: 3, cpt: 0 }
+    this.state.init = this.state.seconds
+    this.timer = 0;
+    this.startTimer = this.startTimer.bind(this);
+    this.countDown = this.countDown.bind(this);
+    this.reset = this.reset.bind(this);
+  }
+
+  startTimer() {
+    if (this.timer == 0) {
+      this.timer = setInterval(this.countDown, 1000);
+    }
+  }
+
+  countDown() {
+    // Remove one second, set state so a re-render happens.
+    let seconds = this.state.seconds - 1;
+    this.setState({ progress: 100-(100/this.state.init)*this.state.seconds+(100/this.state.init) })
+    this.setState({
+      seconds: seconds,
+    });
+
+    // Check if we're at zero.
+    if (seconds == 0) {
+      clearInterval(this.timer);
+      this.state.cpt = this.state.cpt + 1
+      this.reset()
+    }
+  }
+
+  handleClickChange() {
+    this.startTimer()
+  }
+
+  reset(){
+    this.timer = 0;
+    this.state.progress = 0
+    this.state.seconds = this.state.init
+    this.startTimer()
+  }
+
+  handleClickReset() {
+    this.reset()
+  }
+
   componentDidMount() {
     try {
       this.props.fetchNotes();
@@ -65,10 +114,29 @@ class PonyNote extends Component {
           <input type="submit" value="Save Note" />
           <button onClick={this.resetForm}>Reset</button>
         </form>
-      </div>
+        <div id="App">
+          time: {this.state.seconds}<br/>
+          progress: {this.state.progress}<br/>
+          cpt: {this.state.cpt}<br/>
+          <button type="button" onClick={this.handleClickChange}>
+            Change Progress
+          </button>
+          <button type="button" onClick={this.handleClickReset}>
+            Reset Progress
+          </button>
+          <hr />
+          <ProgressBar progress={this.state.progress} />
+        </div></div>
     )
   }
 }
+
+const ProgressBar = ({ progress }) => (
+  <div className="progressbar">
+    <div className="progress" style={{ width: `${progress}%`}}>
+    </div>
+  </div>
+)
 
 
 const mapStateToProps = state => {

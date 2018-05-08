@@ -1,2 +1,23 @@
 @import url("css/normalize.css");
 @import url("css/sakura.css");
+
+.progressbar .progress {
+  background-color: green;
+  border-radius: 4px;
+  transition: width 400ms ease-in-out;
+  height: 100%;
+}
+
+.progressbar {
+  width: 100%;
+  height: 30px;
+  border-radius: 4px;
+  background-color: lightgrey;
+  padding: 10px;
+}
+
+#App {
+  width: 70%;
+  height: 100%;
+  margin: 10px;
+}

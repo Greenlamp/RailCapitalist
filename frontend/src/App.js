@@ -14,16 +14,16 @@ let store = createStore(railApp, applyMiddleware(thunk));
 
 class App extends Component {
   render() {
-  return (
-    <Provider store={store}>
-      <BrowserRouter>
-      <Switch>
-        <Route exact path="/" component={RailCapitalist} />
-        <Route component={NotFound} />
-      </Switch>
-      </BrowserRouter>
-    </Provider>
-  );
+      return (
+        <Provider store={store}>
+          <BrowserRouter>
+          <Switch>
+            <Route exact path="/" component={RailCapitalist} />
+            <Route component={NotFound} />
+          </Switch>
+          </BrowserRouter>
+        </Provider>
+      );
   }
 }
 
