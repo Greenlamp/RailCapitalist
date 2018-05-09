@@ -6,4 +6,5 @@ export const addTotal = value => {
         value
     }
 }
-export const increment = () => ({ type: types.INCREMENT })
+export const increment = (value) => ({ type: types.INCREMENT, value: value })
+export const incrementByOne = () => ({ type: types.INCREMENT, value: 1 })

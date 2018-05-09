@@ -4,7 +4,7 @@
 .progressbar .progress {
   background-color: green;
   border-radius: 4px;
-  transition: width 400ms ease-in-out;
+  transition: width ease-in-out;
   height: 100%;
 }
 
