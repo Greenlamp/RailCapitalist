@@ -7,4 +7,6 @@ export const addTotal = value => {
     }
 }
 export const increment = (value) => ({ type: types.INCREMENT, value: value })
+export const level_up = (id) => ({ type: types.LEVEL_UP, id: id})
 export const incrementByOne = () => ({ type: types.INCREMENT, value: 1 })
+export const multiplicateur = (value) => ({ type: types.MULTIPLICATEUR, value: value })

@@ -6,6 +6,8 @@ import MainSection from '../components/MainSection'
 const mapStateToProps = state => {
     return {
         total: state.board.total,
+        shops: state.board.shops,
+        multiplicateur: state.board.multiplicateur
     }
 }
 
