@@ -82,7 +82,7 @@ class Board extends Component{
         let cout = ((this.state.niveau * this.shop.cout) *this.shop.mult).toFixed(2) * this.props.multiplicateur
         if(this.props.total >= cout) {
             this.actions.level_up(this.shop.id)
-            this.setState({niveau: this.state.niveau + this.props.multiplicateur, gain_reel: this.shop.gain * this.state.niveau + this.props.multiplicateur})
+            this.setState({niveau: this.state.niveau + this.props.multiplicateur, gain_reel: this.shop.gain * (this.state.niveau + this.props.multiplicateur)})
         }else{
             alert("pas assez d'argent")
         }
