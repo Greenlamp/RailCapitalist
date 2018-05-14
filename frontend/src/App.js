@@ -10,7 +10,7 @@ import railApp from "./reducers";
 import RailCapitalist from "./components/RailCapitalist";
 import NotFound from "./components/NotFound";
 
-let store = createStore(railApp, applyMiddleware(thunk));
+let store = createStore(railApp, applyMiddleware(thunk), window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__());
 
 class App extends Component {
   render() {

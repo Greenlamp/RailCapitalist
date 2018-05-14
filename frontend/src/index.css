@@ -1,6 +1,7 @@
 
 .progressbar .progress {
   background-color: greenyellow;
+  color: red;
   border-radius: 4px;
   transition: width ease-in-out;
   height: 100%;
@@ -22,5 +23,5 @@
 }
 
 body {
-   background-color: #cccccc;
+  background-color: lightgrey;
 }

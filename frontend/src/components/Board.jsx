@@ -7,32 +7,63 @@ import { Alert, Table } from 'reactstrap';
 class Board extends Component{
     constructor(props) {
         super(props)
-        this.handleClickChange = this.handleClickChange.bind(this)
-        this.handleClickAuto = this.handleClickAuto.bind(this)
-        this.showAlert = this.showAlert.bind(this)
 
         this.level_up = this.level_up.bind(this)
         this.state = { progress: 0, time: {}, seconds: 100, cpt: 0, auto: false, error:false, levelling:false, running:false }
         this.init = this.state.seconds
         this.timer = 0;
-        this.startTimer = this.startTimer.bind(this);
-        this.countDown = this.countDown.bind(this);
-        this.reset = this.reset.bind(this);
 
         this.actions = this.props.actions
         this.shop = this.props.shop
-        this.state.niveau = this.shop.niveau
-        this.state.gain_reel = this.shop.gain * this.state.niveau
+        this.state.gain_reel = this.shop.gain * this.shop.niveau
     }
 
-    startTimer() {
+    handleClickChange = () => {
+        if(!this.state.running){
+            this.reset()
+            this.setState({auto: false})
+            this.startTimer()
+            this.setState({running: true})
+        }
+    }
+
+    handleClickAuto = () => {
+        if(!this.running){
+            this.reset()
+            this.setState({auto: true})
+            this.startTimer()
+            this.setState({running: true})
+        }
+    }
+
+    handleClickStop = () => {
+        this.setState({auto: false})
+    }
+
+    level_up = () => {
+        if (!this.state.levelling) {
+            this.setState({levelling: true})
+            let cout = ((this.shop.niveau * this.shop.cout) * this.shop.mult).toFixed(2) * this.props.multiplicateur
+            if (this.props.total >= cout) {
+                this.actions.level_up(this.shop.id)
+                this.setState({
+                    gain_reel: this.shop.gain * (this.shop.niveau + this.props.multiplicateur)
+                })
+            } else {
+                this.setState({error: true})
+            }
+            this.setState({levelling: false})
+        }
+    }
+
+    startTimer = () => {
         if (this.timer === 0) {
           let delay = this.shop.temp*10
           this.timer = setInterval(this.countDown, delay);
         }
     }
 
-    countDown() {
+    countDown = () => {
         // Remove one second, set state so a re-render happens.
         let seconds = this.state.seconds - 1;
         this.setState({
@@ -54,48 +85,13 @@ class Board extends Component{
         }
     }
 
-    handleClickChange() {
-        if(!this.state.running){
-            this.reset()
-            this.setState({auto: false})
-            this.startTimer()
-            this.setState({running: true})
-        }
-    }
-
-    handleClickAuto() {
-        if(!this.running){
-            this.reset()
-            this.setState({auto: true})
-            this.startTimer()
-            this.setState({running: true})
-        }
-    }
-
-    reset(){
+    reset = () =>{
         this.timer = 0;
         this.setState({seconds:this.init, progress: 0})
         this.startTimer()
     }
 
-    level_up(){
-        if (!this.state.levelling) {
-            this.setState({levelling: true})
-            let cout = ((this.state.niveau * this.shop.cout) * this.shop.mult).toFixed(2) * this.props.multiplicateur
-            if (this.props.total >= cout) {
-                this.actions.level_up(this.shop.id)
-                this.setState({
-                    niveau: this.state.niveau + this.props.multiplicateur,
-                    gain_reel: this.shop.gain * (this.state.niveau + this.props.multiplicateur)
-                })
-            } else {
-                this.setState({error: true})
-            }
-            this.setState({levelling: false})
-        }
-    }
-
-    showAlert(){
+    showAlert = () =>{
         if(this.state.error) {
             setTimeout(function() { this.setState({error: false}); }.bind(this), 3000);
             return (
@@ -118,13 +114,13 @@ class Board extends Component{
                         <td colSpan="2" align="center">{this.shop.nom}</td>
                     </tr>
                     <tr>
-                        <td width="10">Niveau:</td><td align="left">{this.state.niveau}</td>
+                        <td width="10">Niveau:</td><td align="left">{this.shop.niveau}</td>
                     </tr>
                     <tr>
-                        <td colSpan="2" align="center">Cout pour monter au niveau supérieur:</td>
+                        <td colSpan="2" align="center">Cout niveau supérieur:</td>
                     </tr>
                     <tr>
-                        <td colSpan="2" align="center">($)(x{this.props.multiplicateur}) {((this.state.niveau * this.shop.cout) *this.shop.mult).toFixed(2) * this.props.multiplicateur}</td>
+                        <td colSpan="2" align="center">($)(x{this.props.multiplicateur}) {((this.shop.niveau * this.shop.cout) *this.shop.mult).toFixed(2) * this.props.multiplicateur}</td>
                     </tr>
                 </tbody>
                 </Table>
@@ -135,7 +131,11 @@ class Board extends Component{
                           <Button type="button" onClick={this.handleClickChange}>V</Button>
                         </td>
                         <td>
-                          <Button type="button" onClick={this.handleClickAuto}>Auto</Button>
+                            {!this.state.auto ? (
+                                <Button type="button" onClick={this.handleClickAuto}>Auto</Button>
+                            ):(
+                                <Button type="button"onClick={this.handleClickStop}>Stop</Button>
+                            )}
                         </td>
                         <td>
                           <Button type="button" onClick={this.level_up}>Acheter niveau</Button>
