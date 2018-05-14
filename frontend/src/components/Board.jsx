@@ -1,15 +1,18 @@
 import React, { Component } from 'react';
 import ProgressBar from "../components/ProgressBar";
 import {connect} from 'react-redux';
+import { Button } from 'reactstrap';
+import { Alert, Table } from 'reactstrap';
 
 class Board extends Component{
     constructor(props) {
         super(props)
         this.handleClickChange = this.handleClickChange.bind(this)
         this.handleClickAuto = this.handleClickAuto.bind(this)
+        this.showAlert = this.showAlert.bind(this)
 
         this.level_up = this.level_up.bind(this)
-        this.state = { progress: 0, time: {}, seconds: 100, cpt: 0, auto: false }
+        this.state = { progress: 0, time: {}, seconds: 100, cpt: 0, auto: false, error:false, levelling:false, running:false }
         this.init = this.state.seconds
         this.timer = 0;
         this.startTimer = this.startTimer.bind(this);
@@ -20,10 +23,6 @@ class Board extends Component{
         this.shop = this.props.shop
         this.state.niveau = this.shop.niveau
         this.state.gain_reel = this.shop.gain * this.state.niveau
-
-
-        this.state.running = false
-        this.state.levelling = false
     }
 
     startTimer() {
@@ -80,24 +79,40 @@ class Board extends Component{
     }
 
     level_up(){
-        if(!this.state.levelling) {
+        if (!this.state.levelling) {
             this.setState({levelling: true})
-            let cout = ((this.state.niveau * this.shop.cout) *this.shop.mult).toFixed(2) * this.props.multiplicateur
-            if(this.props.total >= cout) {
+            let cout = ((this.state.niveau * this.shop.cout) * this.shop.mult).toFixed(2) * this.props.multiplicateur
+            if (this.props.total >= cout) {
                 this.actions.level_up(this.shop.id)
-                this.setState({niveau: this.state.niveau + this.props.multiplicateur, gain_reel: this.shop.gain * (this.state.niveau + this.props.multiplicateur)})
-            }else{
-                alert("pas assez d'argent")
+                this.setState({
+                    niveau: this.state.niveau + this.props.multiplicateur,
+                    gain_reel: this.shop.gain * (this.state.niveau + this.props.multiplicateur)
+                })
+            } else {
+                this.setState({error: true})
             }
             this.setState({levelling: false})
         }
     }
 
+    showAlert(){
+        if(this.state.error) {
+            setTimeout(function() { this.setState({error: false}); }.bind(this), 3000);
+            return (
+                <Alert color="danger">
+                    Pas assez d'argent.
+                </Alert>
+            )
+        }
+    }
+
+
+
     render() {
         return (
           <div>
             <div id="App">
-                <table border="1">
+                <Table>
                     <tbody>
                     <tr>
                         <td colSpan="2" align="center">{this.shop.nom}</td>
@@ -112,24 +127,25 @@ class Board extends Component{
                         <td colSpan="2" align="center">($)(x{this.props.multiplicateur}) {((this.state.niveau * this.shop.cout) *this.shop.mult).toFixed(2) * this.props.multiplicateur}</td>
                     </tr>
                 </tbody>
-                </table><br/>
-                <table>
+                </Table>
+                <Table>
                     <tbody>
                     <tr>
                         <td>
-                          <button type="button" onClick={this.handleClickChange}>V</button>
+                          <Button type="button" onClick={this.handleClickChange}>V</Button>
                         </td>
                         <td>
-                          <button type="button" onClick={this.handleClickAuto}>Auto</button>
+                          <Button type="button" onClick={this.handleClickAuto}>Auto</Button>
                         </td>
                         <td>
-                          <button type="button" onClick={this.level_up}>Acheter niveau</button>
+                          <Button type="button" onClick={this.level_up}>Acheter niveau</Button>
                         </td>
                     </tr>
                     </tbody>
-                </table>
+                </Table>
 
                 <ProgressBar progress={this.state.progress} gain={this.state.gain_reel}/>
+                {this.showAlert()}
             </div>
           </div>
         )
