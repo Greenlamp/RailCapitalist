@@ -19,7 +19,6 @@ const MainSection = ({ total, shops, multiplicateur, actions, test }) =>(
                         return <td height="500" valign="top" key={elm.id}><Board
                             actions={actions}
                             shop={elm}
-                            key={elm.id}
                             total={total}
                             multiplicateur={multiplicateur}
                         /></td>
