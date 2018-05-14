@@ -9,8 +9,15 @@ import railApp from "./reducers";
 
 import RailCapitalist from "./components/RailCapitalist";
 import NotFound from "./components/NotFound";
+import {compose} from "redux";
 
-let store = createStore(railApp, applyMiddleware(thunk), window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__());
+let middles = [thunk,]
+
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+const enhancer = composeEnhancers(
+    applyMiddleware(...middles),
+)
+let store = createStore(railApp, enhancer);
 
 class App extends Component {
   render() {
